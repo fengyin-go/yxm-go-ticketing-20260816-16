@@ -1,10 +1,6 @@
 package store
 
-import (
-	"fmt"
-
-	"ticketing/internal/model"
-)
+import "ticketing/internal/model"
 
 // CreateAgent 新增客服，邮箱重复时返回 ErrConflict。
 func (s *MemoryStore) CreateAgent(a *model.Agent) error {
@@ -12,7 +8,7 @@ func (s *MemoryStore) CreateAgent(a *model.Agent) error {
 	defer s.mu.Unlock()
 	for _, exist := range s.agents {
 		if exist.Email == a.Email {
-			return fmt.Errorf("agent conflict: %v", ErrConflict)
+			return ErrConflict
 		}
 	}
 	s.agents[a.ID] = a
@@ -50,7 +46,7 @@ func (s *MemoryStore) UpdateAgent(a *model.Agent) error {
 	}
 	for _, exist := range s.agents {
 		if exist.ID != a.ID && exist.Email == a.Email {
-			return fmt.Errorf("agent conflict: %v", ErrConflict)
+			return ErrConflict
 		}
 	}
 	s.agents[a.ID] = a

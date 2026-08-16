@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"sort"
 	"time"
 
@@ -23,7 +22,7 @@ func (s *Service) CreateAgent(input model.Agent) (*model.Agent, error) {
 		CreatedAt:  time.Now(),
 	}
 	if err := s.store.CreateAgent(a); err != nil {
-		return nil, fmt.Errorf("create agent: %v", err)
+		return nil, err
 	}
 	s.log.Infof("创建客服 %s", a.Name)
 	return a, nil
@@ -59,7 +58,7 @@ func (s *Service) UpdateAgent(id string, input model.Agent) (*model.Agent, error
 		return nil, err
 	}
 	if err := s.store.UpdateAgent(exist); err != nil {
-		return nil, fmt.Errorf("update agent: %v", err)
+		return nil, err
 	}
 	return exist, nil
 }

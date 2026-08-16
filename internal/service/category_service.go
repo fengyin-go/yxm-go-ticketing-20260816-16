@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"sort"
 	"time"
 
@@ -21,7 +20,7 @@ func (s *Service) CreateCategory(input model.Category) (*model.Category, error) 
 		CreatedAt:   time.Now(),
 	}
 	if err := s.store.CreateCategory(c); err != nil {
-		return nil, fmt.Errorf("create category: %v", err)
+		return nil, err
 	}
 	s.log.Infof("创建分类 %s", c.Name)
 	return c, nil
@@ -53,7 +52,7 @@ func (s *Service) UpdateCategory(id string, input model.Category) (*model.Catego
 		return nil, err
 	}
 	if err := s.store.UpdateCategory(exist); err != nil {
-		return nil, fmt.Errorf("update category: %v", err)
+		return nil, err
 	}
 	return exist, nil
 }
