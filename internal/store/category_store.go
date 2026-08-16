@@ -1,6 +1,10 @@
 package store
 
-import "ticketing/internal/model"
+import (
+	"fmt"
+
+	"ticketing/internal/model"
+)
 
 // CreateCategory 新增分类，名称重复时返回 ErrConflict。
 func (s *MemoryStore) CreateCategory(c *model.Category) error {
@@ -8,7 +12,7 @@ func (s *MemoryStore) CreateCategory(c *model.Category) error {
 	defer s.mu.Unlock()
 	for _, exist := range s.categories {
 		if exist.Name == c.Name {
-			return ErrConflict
+			return fmt.Errorf("category conflict: %v", ErrConflict)
 		}
 	}
 	s.categories[c.ID] = c
@@ -46,7 +50,7 @@ func (s *MemoryStore) UpdateCategory(c *model.Category) error {
 	}
 	for _, exist := range s.categories {
 		if exist.ID != c.ID && exist.Name == c.Name {
-			return ErrConflict
+			return fmt.Errorf("category conflict: %v", ErrConflict)
 		}
 	}
 	s.categories[c.ID] = c
