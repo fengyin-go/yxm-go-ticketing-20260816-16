@@ -23,7 +23,7 @@ func (s *MemoryStore) GetAgent(id string) (*model.Agent, error) {
 	if !ok {
 		return nil, ErrNotFound
 	}
-	return a, nil
+	return cloneAgent(a), nil
 }
 
 // ListAgents 返回全部客服。
@@ -32,7 +32,7 @@ func (s *MemoryStore) ListAgents() []*model.Agent {
 	defer s.mu.RUnlock()
 	list := make([]*model.Agent, 0, len(s.agents))
 	for _, a := range s.agents {
-		list = append(list, a)
+		list = append(list, cloneAgent(a))
 	}
 	return list
 }
@@ -49,7 +49,7 @@ func (s *MemoryStore) UpdateAgent(a *model.Agent) error {
 			return ErrConflict
 		}
 	}
-	s.agents[a.ID] = a
+	s.agents[a.ID] = cloneAgent(a)
 	return nil
 }
 

@@ -18,7 +18,7 @@ func (s *MemoryStore) GetTicket(id string) (*model.Ticket, error) {
 	if !ok {
 		return nil, ErrNotFound
 	}
-	return t, nil
+	return cloneTicket(t), nil
 }
 
 // ListTickets 返回全部工单。
@@ -27,7 +27,7 @@ func (s *MemoryStore) ListTickets() []*model.Ticket {
 	defer s.mu.RUnlock()
 	list := make([]*model.Ticket, 0, len(s.tickets))
 	for _, t := range s.tickets {
-		list = append(list, t)
+		list = append(list, cloneTicket(t))
 	}
 	return list
 }
@@ -39,7 +39,7 @@ func (s *MemoryStore) UpdateTicket(t *model.Ticket) error {
 	if _, ok := s.tickets[t.ID]; !ok {
 		return ErrNotFound
 	}
-	s.tickets[t.ID] = t
+	s.tickets[t.ID] = cloneTicket(t)
 	return nil
 }
 

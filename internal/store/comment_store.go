@@ -18,7 +18,7 @@ func (s *MemoryStore) GetComment(id string) (*model.Comment, error) {
 	if !ok {
 		return nil, ErrNotFound
 	}
-	return c, nil
+	return cloneComment(c), nil
 }
 
 // ListComments 返回指定工单的全部留言。
@@ -28,7 +28,7 @@ func (s *MemoryStore) ListComments(ticketID string) []*model.Comment {
 	list := make([]*model.Comment, 0)
 	for _, c := range s.comments {
 		if c.TicketID == ticketID {
-			list = append(list, c)
+			list = append(list, cloneComment(c))
 		}
 	}
 	return list

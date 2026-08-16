@@ -23,7 +23,7 @@ func (s *MemoryStore) GetCategory(id string) (*model.Category, error) {
 	if !ok {
 		return nil, ErrNotFound
 	}
-	return c, nil
+	return cloneCategory(c), nil
 }
 
 // ListCategories 返回全部分类。
@@ -32,7 +32,7 @@ func (s *MemoryStore) ListCategories() []*model.Category {
 	defer s.mu.RUnlock()
 	list := make([]*model.Category, 0, len(s.categories))
 	for _, c := range s.categories {
-		list = append(list, c)
+		list = append(list, cloneCategory(c))
 	}
 	return list
 }
@@ -49,7 +49,7 @@ func (s *MemoryStore) UpdateCategory(c *model.Category) error {
 			return ErrConflict
 		}
 	}
-	s.categories[c.ID] = c
+	s.categories[c.ID] = cloneCategory(c)
 	return nil
 }
 
