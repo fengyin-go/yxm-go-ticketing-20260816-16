@@ -110,8 +110,12 @@ func (s *Service) AssignTicket(id, assigneeID string) (*model.Ticket, error) {
 		}
 	}
 	exist.AssigneeID = assigneeID
-	if assigneeID != "" && exist.Status == model.StatusOpen {
-		exist.Status = model.StatusProcessing
+	if assigneeID != "" {
+		if exist.Status == model.StatusOpen {
+			exist.Status = model.StatusProcessing
+		}
+	} else if exist.Status == model.StatusProcessing {
+		exist.Status = model.StatusOpen
 	}
 	exist.UpdatedAt = time.Now()
 	if err := s.store.UpdateTicket(exist); err != nil {

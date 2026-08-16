@@ -32,6 +32,19 @@ func (s *MemoryStore) ListTickets() []*model.Ticket {
 	return list
 }
 
+// CountTicketsByAssignee 返回仍分配给指定客服的工单数量。
+func (s *MemoryStore) CountTicketsByAssignee(assigneeID string) int {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	count := 0
+	for _, t := range s.tickets {
+		if t.AssigneeID == assigneeID {
+			count++
+		}
+	}
+	return count
+}
+
 // UpdateTicket 覆盖保存工单。
 func (s *MemoryStore) UpdateTicket(t *model.Ticket) error {
 	s.mu.Lock()

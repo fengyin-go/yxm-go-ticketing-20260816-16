@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"ticketing/internal/model"
+	"ticketing/internal/store"
 	"ticketing/pkg/idgen"
 )
 
@@ -82,6 +83,9 @@ func (s *Service) SetAgentStatus(id, status string) (*model.Agent, error) {
 
 // DeleteAgent 删除客服。
 func (s *Service) DeleteAgent(id string) error {
+	if s.store.CountTicketsByAssignee(id) > 0 {
+		return store.ErrConflict
+	}
 	if err := s.store.DeleteAgent(id); err != nil {
 		return err
 	}
