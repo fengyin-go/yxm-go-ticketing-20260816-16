@@ -111,7 +111,11 @@ func (s *Service) AssignTicket(id, assigneeID string) (*model.Ticket, error) {
 	}
 	exist.AssigneeID = assigneeID
 	if assigneeID != "" && exist.Status == model.StatusOpen {
+		// 分配客服后，待处理工单进入处理中。
 		exist.Status = model.StatusProcessing
+	} else if assigneeID == "" && exist.Status == model.StatusProcessing {
+		// 取消分配后，处理中工单回到待处理。
+		exist.Status = model.StatusOpen
 	}
 	exist.UpdatedAt = time.Now()
 	if err := s.store.UpdateTicket(exist); err != nil {
