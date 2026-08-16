@@ -91,6 +91,11 @@ func (s *Service) UpdateTicket(id string, input model.Ticket) (*model.Ticket, er
 	if err := exist.Validate(); err != nil {
 		return nil, err
 	}
+	if exist.CategoryID != "" {
+		if _, err := s.store.GetCategory(exist.CategoryID); err != nil {
+			return nil, err
+		}
+	}
 	exist.UpdatedAt = time.Now()
 	if err := s.store.UpdateTicket(exist); err != nil {
 		return nil, err

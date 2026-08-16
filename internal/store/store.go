@@ -34,6 +34,7 @@ type Store interface {
 	ListTickets() []*model.Ticket
 	UpdateTicket(t *model.Ticket) error
 	DeleteTicket(id string) error
+	CountTicketsByCategory(categoryID string) int
 
 	// 留言
 	CreateComment(c *model.Comment) error

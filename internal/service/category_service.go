@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"ticketing/internal/model"
+	"ticketing/internal/store"
 	"ticketing/pkg/idgen"
 )
 
@@ -59,6 +60,9 @@ func (s *Service) UpdateCategory(id string, input model.Category) (*model.Catego
 
 // DeleteCategory 删除分类。
 func (s *Service) DeleteCategory(id string) error {
+	if s.store.CountTicketsByCategory(id) > 0 {
+		return store.ErrConflict
+	}
 	if err := s.store.DeleteCategory(id); err != nil {
 		return err
 	}

@@ -32,6 +32,19 @@ func (s *MemoryStore) ListTickets() []*model.Ticket {
 	return list
 }
 
+// CountTicketsByCategory 返回仍引用指定分类的工单数量。
+func (s *MemoryStore) CountTicketsByCategory(categoryID string) int {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	count := 0
+	for _, t := range s.tickets {
+		if t.CategoryID == categoryID {
+			count++
+		}
+	}
+	return count
+}
+
 // UpdateTicket 覆盖保存工单。
 func (s *MemoryStore) UpdateTicket(t *model.Ticket) error {
 	s.mu.Lock()
