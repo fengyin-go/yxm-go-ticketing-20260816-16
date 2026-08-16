@@ -131,7 +131,11 @@ func (f TicketFilter) Match(t *Ticket) bool {
 	}
 	if f.Keyword != "" {
 		k := strings.ToLower(strings.TrimSpace(f.Keyword))
-		if k != "" && !strings.Contains(strings.ToLower(t.Title), k) {
+		if k != "" &&
+			!strings.Contains(strings.ToLower(t.Title), k) &&
+			!strings.Contains(strings.ToLower(t.Description), k) &&
+			!strings.Contains(strings.ToLower(t.RequesterName), k) &&
+			!strings.Contains(strings.ToLower(t.RequesterEmail), k) {
 			return false
 		}
 	}
