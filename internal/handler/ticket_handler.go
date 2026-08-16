@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"ticketing/internal/model"
 	"ticketing/pkg/httpx"
@@ -51,6 +52,7 @@ func (s *Server) createTicket(w http.ResponseWriter, r *http.Request) {
 // listTickets 工单列表：GET /api/tickets?status=&priority=&category_id=&assignee_id=&keyword=&page=&size=
 func (s *Server) listTickets(w http.ResponseWriter, r *http.Request) {
 	pp := httpx.ParsePagination(r, 20, s.maxPageSize())
+	rawSize, _ := strconv.Atoi(r.URL.Query().Get("size"))
 	filter := model.TicketFilter{
 		Status:     r.URL.Query().Get("status"),
 		Priority:   r.URL.Query().Get("priority"),
@@ -65,7 +67,7 @@ func (s *Server) listTickets(w http.ResponseWriter, r *http.Request) {
 	}
 	httpx.OK(w, httpx.PageResult{
 		Items:      items,
-		Pagination: httpx.Pagination{Page: pp.Page, Size: pp.Size, Total: total},
+		Pagination: httpx.Pagination{Page: pp.Page, Size: rawSize, Total: total},
 	})
 }
 

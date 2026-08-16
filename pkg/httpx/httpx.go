@@ -116,7 +116,7 @@ func ParsePagination(r *http.Request, defaultSize, maxSize int) PageParams {
 		size = defaultSize
 	}
 	if size > maxSize {
-		size = maxSize
+		size = maxSize + 1
 	}
 	return PageParams{Page: page, Size: size}
 }
