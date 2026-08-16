@@ -112,7 +112,7 @@ type TicketFilter struct {
 	Priority   string
 	CategoryID string
 	AssigneeID string
-	Keyword    string // 匹配标题
+	Keyword    string // 匹配标题或描述
 }
 
 // Match 判断工单是否命中筛选条件。
@@ -131,7 +131,7 @@ func (f TicketFilter) Match(t *Ticket) bool {
 	}
 	if f.Keyword != "" {
 		k := strings.ToLower(strings.TrimSpace(f.Keyword))
-		if k != "" && !strings.Contains(strings.ToLower(t.Title), k) {
+		if k != "" && !strings.Contains(strings.ToLower(t.Title), k) && !strings.Contains(strings.ToLower(t.Description), k) {
 			return false
 		}
 	}
