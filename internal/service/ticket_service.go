@@ -84,6 +84,11 @@ func (s *Service) UpdateTicket(id string, input model.Ticket) (*model.Ticket, er
 	if err != nil {
 		return nil, err
 	}
+	if input.CategoryID != "" {
+		if _, err := s.store.GetCategory(input.CategoryID); err != nil {
+			return nil, err
+		}
+	}
 	exist.Title = input.Title
 	exist.Description = input.Description
 	exist.Priority = input.Priority
